@@ -11,33 +11,8 @@ import About from './pages/About';
 import Services from './pages/Services';
 import Blog from './pages/Blog';
 import Contact from './pages/Contact';
-import { useEffect } from 'react';
 
 function App() {
-  useEffect(() => {
-    // Disparar o evento page_view com base no window.location
-    const handlePageView = () => {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: 'page_views',
-        page_path: window.location.pathname,
-        page_title: document.title,
-      });
-    };
-
-    // Chamar o evento quando o componente é montado
-    handlePageView();
-
-    // Adicionar um listener para mudanças no histórico (para Single Page Applications)
-    const handlePopState = () => handlePageView();
-    window.addEventListener('popstate', handlePopState);
-
-    // Limpar o listener quando o componente for desmontado
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, []);
-
   return (
     <Router>
       <div className="flex flex-col min-h-screen">

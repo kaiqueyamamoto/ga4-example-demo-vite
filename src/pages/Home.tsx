@@ -1,8 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, ChevronRight, Users, Briefcase, BarChart } from 'lucide-react';
+import {
+  ArrowRight,
+  ChevronRight,
+  Users,
+  Briefcase,
+  BarChart,
+} from 'lucide-react';
 
 const Home = () => {
+  useEffect(() => {
+    // Disparar o evento page_view com base no window.location
+    const handlePageView = () => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'page_views',
+        page_path: window.location.pathname,
+        page_title: document.title,
+      });
+    };
+
+    // Chamar o evento quando o componente é montado
+    handlePageView();
+
+    // Adicionar um listener para mudanças no histórico (para Single Page Applications)
+    const handlePopState = () => handlePageView();
+    window.addEventListener('popstate', handlePopState);
+
+    // Limpar o listener quando o componente for desmontado
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
   return (
     <div>
       {/* Hero Section */}
@@ -21,8 +50,8 @@ const Home = () => {
               With Modern Solutions
             </h1>
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-              We help businesses grow and succeed in the digital age with innovative
-              strategies and cutting-edge technology.
+              We help businesses grow and succeed in the digital age with
+              innovative strategies and cutting-edge technology.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <button className="bg-white text-indigo-600 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center">
@@ -98,7 +127,8 @@ const Home = () => {
                 Ready to Get Started?
               </h2>
               <p className="text-xl text-indigo-100">
-                Join thousands of satisfied customers who trust us with their business.
+                Join thousands of satisfied customers who trust us with their
+                business.
               </p>
             </div>
             <button className="bg-white text-indigo-600 px-8 py-3 rounded-md font-semibold hover:bg-indigo-50 transition-colors duration-200 flex items-center">

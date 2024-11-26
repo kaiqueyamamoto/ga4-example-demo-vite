@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 
 const Contact = () => {
+  useEffect(() => {
+    // Disparar o evento page_view com base no window.location
+    const handlePageView = () => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'page_views',
+        page_path: window.location.pathname,
+        page_title: document.title,
+      });
+    };
+
+    // Chamar o evento quando o componente é montado
+    handlePageView();
+
+    // Adicionar um listener para mudanças no histórico (para Single Page Applications)
+    const handlePopState = () => handlePageView();
+    window.addEventListener('popstate', handlePopState);
+
+    // Limpar o listener quando o componente for desmontado
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
   return (
     <div className="bg-gray-50">
       {/* Hero Section */}
@@ -16,7 +39,8 @@ const Contact = () => {
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Contact Us</h1>
             <p className="text-xl text-indigo-100 max-w-3xl mx-auto">
-              Get in touch with our team to discuss how we can help transform your business.
+              Get in touch with our team to discuss how we can help transform
+              your business.
             </p>
           </motion.div>
         </div>
@@ -33,11 +57,16 @@ const Contact = () => {
               transition={{ duration: 0.8 }}
               className="bg-white rounded-lg shadow-lg p-8"
             >
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Send Us a Message
+              </h2>
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor="firstName"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       First Name
                     </label>
                     <input
@@ -47,7 +76,10 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor="lastName"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       Last Name
                     </label>
                     <input
@@ -58,7 +90,10 @@ const Contact = () => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Email
                   </label>
                   <input
@@ -68,7 +103,10 @@ const Contact = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="subject"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Subject
                   </label>
                   <input
@@ -78,7 +116,10 @@ const Contact = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Message
                   </label>
                   <textarea
@@ -105,7 +146,9 @@ const Contact = () => {
               className="space-y-8"
             >
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                  Contact Information
+                </h2>
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <MapPin className="h-6 w-6 text-indigo-600 mt-1" />
@@ -135,7 +178,9 @@ const Contact = () => {
                   <div className="flex items-start">
                     <Clock className="h-6 w-6 text-indigo-600 mt-1" />
                     <div className="ml-4">
-                      <h3 className="font-medium text-gray-900">Business Hours</h3>
+                      <h3 className="font-medium text-gray-900">
+                        Business Hours
+                      </h3>
                       <p className="text-gray-600">
                         Monday - Friday: 9:00 AM - 6:00 PM
                         <br />
