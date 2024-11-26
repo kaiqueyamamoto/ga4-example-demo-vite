@@ -14,17 +14,29 @@ import Contact from './pages/Contact';
 import { useEffect } from 'react';
 
 function App() {
-  const location = useLocation();
-
   useEffect(() => {
-    // Disparar o evento page_view sempre que a rota mudar
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: 'page_view',
-      page_path: location.pathname,
-      page_title: document.title,
-    });
-  }, [location]);
+    // Disparar o evento page_view com base no window.location
+    const handlePageView = () => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'page_view',
+        page_path: window.location.pathname,
+        page_title: document.title,
+      });
+    };
+
+    // Chamar o evento quando o componente é montado
+    handlePageView();
+
+    // Adicionar um listener para mudanças no histórico (para Single Page Applications)
+    const handlePopState = () => handlePageView();
+    window.addEventListener('popstate', handlePopState);
+
+    // Limpar o listener quando o componente for desmontado
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
 
   return (
     <Router>
