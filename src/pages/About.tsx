@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Clock } from 'lucide-react';
 import TeamMember from '../components/about/TeamMember';
@@ -6,6 +6,30 @@ import MissionSection from '../components/about/MissionSection';
 import { teamMembers } from '../data/team';
 
 const About = () => {
+  useEffect(() => {
+    // Disparar o evento page_view com base no window.location
+    const handlePageView = () => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'page_views',
+        page_path: window.location.pathname,
+        page_title: document.title,
+      });
+    };
+
+    // Chamar o evento quando o componente é montado
+    handlePageView();
+
+    // Adicionar um listener para mudanças no histórico (para Single Page Applications)
+    const handlePopState = () => handlePageView();
+    window.addEventListener('popstate', handlePopState);
+
+    // Limpar o listener quando o componente for desmontado
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
   return (
     <div className="bg-gray-50">
       {/* Hero Section */}
@@ -19,8 +43,8 @@ const About = () => {
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6">About Us</h1>
             <p className="text-xl text-indigo-100 max-w-3xl mx-auto">
-              We're a team of passionate individuals dedicated to transforming businesses
-              through innovative digital solutions.
+              We're a team of passionate individuals dedicated to transforming
+              businesses through innovative digital solutions.
             </p>
           </motion.div>
         </div>
@@ -79,15 +103,16 @@ const About = () => {
                 <h3 className="text-2xl font-semibold">Our History</h3>
               </div>
               <p className="text-gray-600">
-                Founded in 2015, we began with a simple mission: to help businesses
-                thrive in the digital age. What started as a small team of passionate
-                innovators has grown into a global force in digital transformation.
+                Founded in 2015, we began with a simple mission: to help
+                businesses thrive in the digital age. What started as a small
+                team of passionate innovators has grown into a global force in
+                digital transformation.
               </p>
               <p className="text-gray-600">
-                Today, we're proud to serve hundreds of clients worldwide, delivering
-                cutting-edge solutions that drive real business results. Our journey
-                is marked by continuous innovation, strategic growth, and an unwavering
-                commitment to excellence.
+                Today, we're proud to serve hundreds of clients worldwide,
+                delivering cutting-edge solutions that drive real business
+                results. Our journey is marked by continuous innovation,
+                strategic growth, and an unwavering commitment to excellence.
               </p>
             </motion.div>
           </div>
@@ -102,8 +127,8 @@ const About = () => {
               Meet Our Team
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our success is driven by our talented team of experts who bring diverse
-              skills and perspectives to every project.
+              Our success is driven by our talented team of experts who bring
+              diverse skills and perspectives to every project.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

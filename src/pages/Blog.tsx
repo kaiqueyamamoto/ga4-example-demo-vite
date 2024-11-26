@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
 import BlogCard from '../components/blog/BlogCard';
@@ -9,21 +9,50 @@ const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const categories = useMemo(() => {
-    return ['All', ...new Set(blogPosts.map(post => post.category))];
+    return ['All', ...new Set(blogPosts.map((post) => post.category))];
   }, []);
 
   const filteredPosts = useMemo(() => {
-    return blogPosts.filter(post => {
-      const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    return blogPosts.filter((post) => {
+      const matchesSearch =
+        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      const matchesCategory = selectedCategory === '' || selectedCategory === 'All' ||
+        post.tags.some((tag) =>
+          tag.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+
+      const matchesCategory =
+        selectedCategory === '' ||
+        selectedCategory === 'All' ||
         post.category === selectedCategory;
 
       return matchesSearch && matchesCategory;
     });
   }, [searchTerm, selectedCategory]);
+
+  useEffect(() => {
+    // Disparar o evento page_view com base no window.location
+    const handlePageView = () => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'page_views',
+        page_path: window.location.pathname,
+        page_title: document.title,
+      });
+    };
+
+    // Chamar o evento quando o componente é montado
+    handlePageView();
+
+    // Adicionar um listener para mudanças no histórico (para Single Page Applications)
+    const handlePopState = () => handlePageView();
+    window.addEventListener('popstate', handlePopState);
+
+    // Limpar o listener quando o componente for desmontado
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
 
   return (
     <div className="bg-gray-50">
@@ -38,7 +67,8 @@ const Blog = () => {
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Blog</h1>
             <p className="text-xl text-indigo-100 max-w-3xl mx-auto">
-              Insights, updates, and expert perspectives on technology and digital innovation.
+              Insights, updates, and expert perspectives on technology and
+              digital innovation.
             </p>
           </motion.div>
         </div>
