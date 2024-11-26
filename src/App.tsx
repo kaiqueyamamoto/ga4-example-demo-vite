@@ -19,7 +19,7 @@ function App() {
     const handlePageView = () => {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
-        event: 'page_view',
+        event: 'page_views',
         page_path: window.location.pathname,
         page_title: document.title,
       });
